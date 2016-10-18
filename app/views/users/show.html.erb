@@ -1,0 +1,19 @@
+Name: <%= @user.name %>
+<br><br>
+Restaurants
+<br>
+
+<ul>
+  <% @user.restaurants.each do |restaurant| %>
+  <li><a href="/restaurants/<%= restaurant.id %>"><%= restaurant.name %></a></li>
+  <% end %>
+</ul>
+<br>
+<form  action="/users/<%=@user.id%>" method="post">
+  <input type="hidden" id="hidden" name="_method" value="delete">
+  <input type="submit" value="Delete">
+</form>
+<br>
+<form action="/users/<%=@user.id%>/edit" method="get">
+  <input type="submit" value="Edit">
+</form>
