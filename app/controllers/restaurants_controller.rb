@@ -41,4 +41,12 @@ class RestaurantsController < ApplicationController
     redirect to '/restaurants'
   end
 
+  post '/restaurants/yelp' do
+    yelp_results = Yelp.client.search(params[:yelp][:city], {term: params[:yelp][:cuisine] })
+    yelp_results.businesses.each do |business|
+      Restaurant.create(name:business.name, rating: business.rating, address: business.location.display_address)
+    end
+    redirect to '/restaurants'
+  end
+
 end
