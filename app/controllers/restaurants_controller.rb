@@ -11,6 +11,9 @@ class RestaurantsController < ApplicationController
 
   post '/restaurants' do
     restaurant = Restaurant.create(params[:restaurant])
+    yelp_url = "https://www.yelp.com/search?find_desc=#{params[:restaurant][:name].split(" ").join("+")}&find_loc=#{params[:restaurant][:address].split(" ").join("+")}"
+    google_url = "http://maps.google.com/?q=#{params[:restaurant][:address].split(/[\s,]+/).join("+")}"
+    restaurant.update(yelp_url:yelp_url, google_url:google_url)
     redirect to "/restaurants/#{restaurant.id}"
   end
 
@@ -42,11 +45,23 @@ class RestaurantsController < ApplicationController
   end
 
   post '/restaurants/yelp' do
-    yelp_results = Yelp.client.search(params[:yelp][:city], {term: params[:yelp][:cuisine] })
-    yelp_results.businesses.each do |business|
-      Restaurant.create(name:business.name, rating: business.rating, address: business.location.display_address)
+    @yelp_results = Yelp.client.search(params[:yelp][:city], {term: params[:yelp][:cuisine] })
+    erb :'restaurants/results.html'
+
+
+  end
+
+  post '/restaurants/results' do
+    params[:yelp_ids].each do |id|
+      restaurant = Yelp.client.business(id)
+      
+      modified_address = "#{restaurant.business.location.display_address[0]}, #{restaurant.business.location.display_address[2]}"
+      address_for_google = modified_address.split(/[\s,]+/).join("+")
+      google_url = "http://maps.google.com/?q=#{address_for_google}"
+      Restaurant.create(name:restaurant.business.name, rating: restaurant.business.rating, address: modified_address, rating_count: restaurant.business.review_count, phone: restaurant.business.display_phone, yelp_url: restaurant.business.url, google_url:google_url)
     end
     redirect to '/restaurants'
+
   end
 
 end

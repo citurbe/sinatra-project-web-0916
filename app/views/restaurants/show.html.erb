@@ -1,6 +1,9 @@
 <p>Name: <%= @restaurant.name %></p>
 <p>Rating: <%= @restaurant.rating %></p>
-<p>Address: <%= @restaurant.address %></p>
+<p>Review Count: <%= @restaurant.rating_count %></p>
+<p>Address: <a href="<%=@restaurant.google_url%>" target="_blank"><%= @restaurant.address %></a></p>
+<p>Phone: <%= @restaurant.phone %></p>
+<p><a href="<%=@restaurant.yelp_url%>" target="_blank">See it on Yelp</a></p>
 <br>
 People who want to try
 <br>
