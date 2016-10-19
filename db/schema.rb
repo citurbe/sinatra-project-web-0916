@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161019135259) do
+ActiveRecord::Schema.define(version: 20161019172936) do
+
+  create_table "businesses", force: :cascade do |t|
+    t.string  "name"
+    t.string  "rating"
+    t.integer "review_count"
+    t.string  "address"
+    t.string  "phone"
+    t.string  "url"
+    t.string  "yelp_id"
+  end
 
   create_table "restaurants", force: :cascade do |t|
     t.string  "name"

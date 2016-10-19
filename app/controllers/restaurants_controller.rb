@@ -53,12 +53,12 @@ class RestaurantsController < ApplicationController
 
   post '/restaurants/results' do
     params[:yelp_ids].each do |id|
-      restaurant = Yelp.client.business(id)
-      
-      modified_address = "#{restaurant.business.location.display_address[0]}, #{restaurant.business.location.display_address[2]}"
+      restaurant = Business.find_by(yelp_id: id)
+
+      modified_address = restaurant.formatted_address
       address_for_google = modified_address.split(/[\s,]+/).join("+")
       google_url = "http://maps.google.com/?q=#{address_for_google}"
-      Restaurant.create(name:restaurant.business.name, rating: restaurant.business.rating, address: modified_address, rating_count: restaurant.business.review_count, phone: restaurant.business.display_phone, yelp_url: restaurant.business.url, google_url:google_url)
+      Restaurant.create(name:restaurant.name, rating: restaurant.rating, address: modified_address, rating_count: restaurant.review_count, phone: restaurant.phone, yelp_url: restaurant.url, google_url:google_url)
     end
     redirect to '/restaurants'
 

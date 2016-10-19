@@ -1,0 +1,18 @@
+<h2>Restaurant Search Results</h2>
+<form action="/businesses" method="post">
+  <p>City: <input type="text" name="city"></p>
+  <p>Cuisine: <input type="text" name="cuisine"></p>
+  <input type="submit" value="Search">
+</form>
+
+<form  action="/restaurants/results" method="post">
+  <% @businesses.each do |business| %>
+  <input type="checkbox" name="yelp_ids[]" value="<%=business.yelp_id%>">
+  Name: <%=business.name%>
+  
+  <p>Rating: <%=business.rating%> from <%=business.review_count%> reviews </p>
+  <p>Address: <%=business.formatted_address%><p>
+    <%end%>
+    <input type="submit" value="Add to Database">
+
+</form>
